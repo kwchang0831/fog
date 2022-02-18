@@ -16,7 +16,7 @@ Or via package manager: [chocolatey](https://chocolatey.org/):
 choco install go
 ```
 
-Please making sure your go version is up to date
+Please making sure your go version is up to date.
 
 ```shell
 # Current latest version 1.77.7
@@ -28,17 +28,16 @@ go version
 Install via go command:
 
 ```shell
-go install github.com/kwchang0831/fog
+go install github.com/kwchang0831/fog@latest
 ```
 
 ## Note
 
-Not fully tested yet. Only ran on Windows x64.  
-Not recommended to use in any production environment.  
+This is an old prototype project of mine a couple of years back. It is still usable surprisely.  
+However, Not well tested. So, Not recommended to use in any production environment.  
 Please use it at your own risk.  
 
 Every committing changes will generate a log for you to revert back.  
-Might not support network drive.  
 
 ## Usages
 
@@ -78,9 +77,7 @@ fog folderout "." -w
 
 ### folderin
 
-Move SomeVideo_SXXEXX into their individual folder
-
-Dry Run on current directory  
+Move SomeVideo_SXXEXX into their individual folder.
 
 ```shell
 fog folderin "." -w
@@ -114,7 +111,7 @@ fog folderin "." -w
 
 ### revert
 
-Undo previous actions
+Undo committed actions from target log file.
 
 ```shell
 fo revert -w [pathToTheLog]
@@ -130,7 +127,7 @@ fo revert -w [pathToTheLog]
 fog replacename "\[Bad\]" "" -d "." -w
 ```
 
-`-d`: Set directory  
+`-d`: Set directory.
 
 `-w` : Commit changes. Without the flag wil be dry run.
 
@@ -160,11 +157,11 @@ fog replacename "\[Bad\]" "" -d "." -w
 fog replacename "\[Bad\]" "" -d "." -m1 -w
 ```
 
-`-d`: Set directory  
+`-d`: Set directory.
 
 `-w` : Commit changes. Without the flag wil be dry run.
 
-`-m1`: Mode 1: Folder name only  
+`-m1`: Mode 1: Folder name only.  
 
 <table>
     <thead>
@@ -192,11 +189,11 @@ fog replacename "\[Bad\]" "" -d "." -m1 -w
 fog replacename "\[Bad\]" "" -d "." -m2 -w
 ```
 
-`-d`: Set directory  
+`-d`: Set directory.
 
 `-w` : Commit changes. Without the flag wil be dry run.
 
-`-m2`: Mode 2: Folder and File name  
+`-m2`: Mode 2: Folder and File name.  
 
 <table>
     <thead>
@@ -224,7 +221,7 @@ fog replacename "\[Bad\]" "" -d "." -m2 -w
 fog replacename "(.*)(SomeVideo)(.*)(S[0-9]+E[0-9]+)(.*)(\.(mp4|avi))" "$2-$4$6" -d "." -w
 ```
 
-`-d`: Set directory  
+`-d`: Set directory.  
 
 `-w` : Commit changes. Without the flag wil be dry run.
 
@@ -250,7 +247,7 @@ Learn more and try regex, see [regex101](https://regex101.com/).
 
 ### Show Help
 
-For more information, please check help command
+For more information, please check help command.
 
 ```shell
 fog
