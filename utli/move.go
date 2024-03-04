@@ -2,68 +2,65 @@ package utli
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
 )
 
-// Movematches
+// Movematches optimizes the file moving operation
 func Movematches(targetDir, toDir, find, exclude string, mode int, wet bool) {
-	// Not provide? Same as dir
+	// Set toDir to targetDir if not provided
 	if toDir == "" {
 		toDir = targetDir
 	}
 
-	// Get absolute path
+	// Get absolute paths
 	dirBase, _ := filepath.Abs(targetDir)
 	toBase, _ := filepath.Abs(toDir)
 
-	// Check dir
+	// Check if targetDir exists
 	if _, err := os.Stat(targetDir); os.IsNotExist(err) {
 		fmt.Printf("[ERR] %s\n", err)
 		os.Exit(1)
 	}
 
-	// Start checking files in the dir
-	workDir, err := ioutil.ReadDir(targetDir)
+	// Read directory
+	workDir, err := os.ReadDir(targetDir)
 	if err != nil {
 		fmt.Printf("[ERR] %s\n", err)
 		os.Exit(1)
 	}
 
-	// Organize todo
+	// Prepare paths for logging
+	dirBaseSlash := filepath.ToSlash(dirBase)
+	toBaseSlash := filepath.ToSlash(toBase)
+	startMsg := fmt.Sprintf("[CMD][Mode%d] move Find \"%s\" From \"%s\" -> To \"%s\"\n", mode, find, dirBaseSlash, toBaseSlash)
+	endMsg := ""
+
+	// Prepare regular expressions
 	matchName := regexp.MustCompile(find)
-	excludeName := regexp.MustCompile(exclude)
+	var excludeName *regexp.Regexp
+	if exclude != "" {
+		excludeName = regexp.MustCompile(exclude)
+	}
 
-	var toDo []transaction
+	// Preallocate capacity for toDo slice
+	toDo := make([]transaction, 0, len(workDir))
+
+	// Iterate through files and folders
 	for _, item := range workDir {
-
-		isDir := item.IsDir()
 		fileName := item.Name()
+		isDir := item.IsDir()
 
-		// Handle File
-		if mode == FileAndFolder ||
-			(!isDir && mode == FileOnly) ||
-			(isDir && mode == FolderOnly) {
-
-			// If match and not excluded
-			if matchName.MatchString(fileName) &&
-				((exclude == "") || (exclude != "" && !excludeName.MatchString(fileName))) {
-				toDo = append(toDo, transaction{
-					"MV",
-					filepath.ToSlash(dirBase),
-					filepath.ToSlash(fileName),
-					filepath.ToSlash(toBase),
-					filepath.ToSlash(fileName)})
+		// Combine conditions for handling files and folders
+		if (mode == FileAndFolder) || (mode == FileOnly && !isDir) || (mode == FolderOnly && isDir) {
+			if matchName.MatchString(fileName) && (excludeName == nil || !excludeName.MatchString(fileName)) {
+				toDo = append(toDo, transaction{"MV", dirBaseSlash, filepath.ToSlash(fileName), toBaseSlash, filepath.ToSlash(fileName)})
 			}
 		}
 	}
 
-	// Start doing work
-	startMsg := fmt.Sprintf("[CMD][Mode%d] %s Find \"%s\" From \"%s\" -> To \"%s\"\n", mode, "move", find,
-		filepath.Join(filepath.ToSlash(dirBase)), filepath.Join(filepath.ToSlash(toBase)))
-	endMsg := ""
+	// Log start message
 	if wet {
 		log.info("#" + startMsg)
 		startMsg = "[WET]" + startMsg
@@ -71,11 +68,13 @@ func Movematches(targetDir, toDir, find, exclude string, mode int, wet bool) {
 	} else {
 		startMsg = "[DRY]" + startMsg
 	}
+	fmt.Print(startMsg)
 
-	fmt.Printf(startMsg)
-	// Commit transactions
-	for _, i := range toDo {
-		fmt.Print(i.commit(wet))
+	// Execute transactions
+	for _, t := range toDo {
+		fmt.Print(t.commit(wet))
 	}
-	fmt.Printf(endMsg)
+
+	// Log end message
+	fmt.Print(endMsg)
 }

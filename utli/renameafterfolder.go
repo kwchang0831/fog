@@ -2,7 +2,6 @@ package utli
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -21,7 +20,7 @@ func RenameAfterFolder(targetDir, find, exclude string, wet bool) {
 	}
 
 	// Start checking files in the targetDir
-	workDir, err := ioutil.ReadDir(targetDir)
+	workDir, err := os.ReadDir(targetDir)
 	if err != nil {
 		fmt.Printf("[ERR] %s\n", err)
 		os.Exit(1)
@@ -39,7 +38,7 @@ func RenameAfterFolder(targetDir, find, exclude string, wet bool) {
 			if matchName.MatchString(folderName) &&
 				((exclude == "") || (exclude != "" && !excludeName.MatchString(folderName))) {
 				todoPath := path.Join(dirBase, folderName)
-				childDir, err := ioutil.ReadDir(todoPath)
+				childDir, err := os.ReadDir(todoPath)
 				if err != nil {
 					fmt.Printf("[ERR] %s\n", err)
 					os.Exit(1)
@@ -72,10 +71,10 @@ func RenameAfterFolder(targetDir, find, exclude string, wet bool) {
 		startMsg = "[DRY]" + startMsg
 	}
 
-	fmt.Printf(startMsg)
+	fmt.Print(startMsg)
 	// Commit transactions
 	for _, i := range toDo {
 		fmt.Print(i.commit(wet))
 	}
-	fmt.Printf(endMsg)
+	fmt.Print(endMsg)
 }

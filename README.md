@@ -4,6 +4,14 @@ Files Organizer in Go
 
 A little tool to help organize files easier.
 
+## Note
+
+This project is a small prototype from my early days of learning Golang, approximately 10 years ago.  
+While it may still be functional, it has undergone limited testing.  
+**Caution is advised, particularly in production environments.**  
+Every commit generates a log, enabling easy reversion if necessary.  
+However, please be mindful of potential risks before proceeding.
+
 ## Installation
 
 ### Install Go
@@ -16,11 +24,10 @@ Or via package manager: [chocolatey](https://chocolatey.org/):
 choco install go
 ```
 
-Please making sure your go version is up to date.
+Check go version
 
 ```shell
-# Current latest version 1.77.7
-go version 
+go version
 ```
 
 ### Install/Update this tool
@@ -30,14 +37,6 @@ Install via go command:
 ```shell
 go install github.com/kwchang0831/fog@latest
 ```
-
-## Note
-
-This is an old prototype project of mine a couple of years back. It is still usable surprisely.  
-However, Not well tested. So, Not recommended to use in any production environment.  
-Please use it at your own risk.  
-
-Every committing changes will generate a log for you to revert back.  
 
 ## Usages
 
@@ -161,7 +160,7 @@ fog replacename "\[Bad\]" "" -d "." -m1 -w
 
 `-w` : Commit changes. Without the flag wil be dry run.
 
-`-m1`: Mode 1: Folder name only.  
+`-m1`: Mode 1: Folder name only.
 
 <table>
     <thead>
@@ -193,7 +192,7 @@ fog replacename "\[Bad\]" "" -d "." -m2 -w
 
 `-w` : Commit changes. Without the flag wil be dry run.
 
-`-m2`: Mode 2: Folder and File name.  
+`-m2`: Mode 2: Folder and File name.
 
 <table>
     <thead>
@@ -221,11 +220,11 @@ fog replacename "\[Bad\]" "" -d "." -m2 -w
 fog replacename "(.*)(SomeVideo)(.*)(S[0-9]+E[0-9]+)(.*)(\.(mp4|avi))" "$2-$4$6" -d "." -w
 ```
 
-`-d`: Set directory.  
+`-d`: Set directory.
 
 `-w` : Commit changes. Without the flag wil be dry run.
 
-Learn more and try regex, see [regex101](https://regex101.com/).  
+Learn more and try regex, see [regex101](https://regex101.com/).
 
 <table>
     <thead>
@@ -279,6 +278,12 @@ Use "fog [command] --help" for more information about a command.
 ```
 
 ## Development
+
+Upgrade dependencies
+
+```go
+go get -u
+```
 
 Get dependencies
 

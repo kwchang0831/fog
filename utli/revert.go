@@ -65,11 +65,11 @@ func Revert(logPath string, wet bool) {
 		startMsg = "[DRY]" + startMsg
 	}
 
-	fmt.Printf(startMsg)
+	fmt.Print(startMsg)
 	// Commit transactions
 	for i := len(toDo) - 1; i >= 0; i-- {
 		msg := toDo[i].commit(wet)
 		fmt.Print(msg)
 	}
-	fmt.Printf(endMsg)
+	fmt.Print(endMsg)
 }

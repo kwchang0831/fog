@@ -2,7 +2,6 @@ package utli
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -26,7 +25,7 @@ func Folderin(targetDir string, toDir string, wet bool) {
 	}
 
 	// Start checking files in the dir
-	workDir, err := ioutil.ReadDir(targetDir)
+	workDir, err := os.ReadDir(targetDir)
 	if err != nil {
 		fmt.Printf("[ERR] %s\n", err)
 		os.Exit(1)
@@ -67,10 +66,10 @@ func Folderin(targetDir string, toDir string, wet bool) {
 		startMsg = "[DRY]" + startMsg
 	}
 
-	fmt.Printf(startMsg)
+	fmt.Print(startMsg)
 	// Commit transactions
 	for _, i := range toDo {
 		fmt.Print(i.commit(wet))
 	}
-	fmt.Printf(endMsg)
+	fmt.Print(endMsg)
 }

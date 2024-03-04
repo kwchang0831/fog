@@ -2,7 +2,6 @@ package utli
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -20,7 +19,7 @@ func RmEmptyDir(targetDir string, wet bool) {
 	}
 
 	// Start checking files in the targetDir
-	parentDir, err := ioutil.ReadDir(targetDir)
+	parentDir, err := os.ReadDir(targetDir)
 	if err != nil {
 		fmt.Printf("[ERR] %s\n", err)
 		os.Exit(1)
@@ -30,7 +29,7 @@ func RmEmptyDir(targetDir string, wet bool) {
 	var toDo []transaction
 	for _, parentItem := range parentDir {
 		if parentItem.IsDir() {
-			childDir, err := ioutil.ReadDir(path.Join(targetDir, parentItem.Name()))
+			childDir, err := os.ReadDir(path.Join(targetDir, parentItem.Name()))
 			if err != nil {
 				fmt.Printf("[ERR] %s\n", err)
 				os.Exit(1)
@@ -56,10 +55,10 @@ func RmEmptyDir(targetDir string, wet bool) {
 		startMsg = "[DRY]" + startMsg
 	}
 
-	fmt.Printf(startMsg)
+	fmt.Print(startMsg)
 	// Commit transactions
 	for _, i := range toDo {
 		fmt.Print(i.commit(wet))
 	}
-	fmt.Printf(endMsg)
+	fmt.Print(endMsg)
 }

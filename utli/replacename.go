@@ -2,7 +2,6 @@ package utli
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -26,7 +25,7 @@ func ReplaceName(targetDir, toDir, find, replace, exclude string, mode int, wet 
 	}
 
 	// Start checking files in the targetDir
-	parentDir, err := ioutil.ReadDir(targetDir)
+	parentDir, err := os.ReadDir(targetDir)
 	if err != nil {
 		fmt.Printf("[ERR] %s\n", err)
 		os.Exit(1)
@@ -74,11 +73,11 @@ func ReplaceName(targetDir, toDir, find, replace, exclude string, mode int, wet 
 		startMsg = "[DRY]" + startMsg
 	}
 
-	fmt.Printf(startMsg)
+	fmt.Print(startMsg)
 
 	// Commit transactions
 	for _, i := range toDo {
 		fmt.Print(i.commit(wet))
 	}
-	fmt.Printf(endMsg)
+	fmt.Print(endMsg)
 }
